@@ -95,6 +95,10 @@ public class Node {
     public boolean isValid(String chainKey){
         // TODO: Implement this function. Return true if this and all previous nodes are valid.
         // Otherwise, return false. HINT: Try regenerating the node key with the current values.
+      
+      //Generamos la "clave actual" del nodo con el metodo que ya completamos de generateNewKey
+      //Luego validamos primero si el nodo no es nulo, pq si fuera nulo no tendriamos una oldKey para generar la nueva.
+      //luego ya comparamos la Key actual del nodo con la que debería ser su Key actual y return lo que amerite.
       String encodeKey = generateNewKey(this.previousNode.getKey());
 
       if(this.previousNode == null ){
@@ -115,6 +119,11 @@ public class Node {
         // TODO: Implement this function. Navigate trhough the chain and look for a
         // Node that is inconsistent. Then return which field was modified. Possible values are
         // 'TYPE', 'DATE', and 'AMOUNT'. If no inconsistency is found, return an empty string
+      
+      //Dada la chainString del nodo anterior hacemos lo siguiente: 
+      //1. separamos en pedazos la Key actual del nodo siguiendo las reglas de como esta distribuida de 2 espacios para Type, 19 para date y 21 para amount
+      //2.generamos los pedazos de la Key esperada con los metodos de encode y la chainstring
+      //3. ya teniendo todos los pedazos, los comparamos y buscamos inconsistencias.
       String typeNode = this.key.substring(0,2);
       String dateNode = this.key.substring(2,21);
       String amountNode = this.key.substring(21);
@@ -154,6 +163,8 @@ public class Node {
 
     String generateNewKey(String oldKey){
       // TODO: Implement this function. To implement just follow these instructions:
+      //Solo se siguen las instrucciones
+      
       // 1. Encode the type using the old key
       String typeEncode = encodeString(this.getType(),oldKey);
       // 2. Encode the date using the old key
@@ -162,7 +173,6 @@ public class Node {
       String amountEncode = encodeDouble(this.getAmount(),oldKey);
       
       String concatEncodeKey = typeEncode + dateEncode + amountEncode;
-      //this.key = concatEncodeKey;
       
       return concatEncodeKey;
       // The new key to be returned is the concatenation of the encoded type, date and amount 
