@@ -3,7 +3,7 @@ package transactions;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-import exceptions.*;
+import exceptions.NodeInvalidException;
 
 /* This class represents a single transaction. Each transaction will be 
 * linked to the previous one in order to maintain consistency. Please modify
@@ -99,10 +99,27 @@ public class Node {
     }
 
     public String findInconsistency(String chainString){
+      
         // TODO: Implement this function. Navigate trhough the chain and look for a
         // Node that is inconsistent. Then return which field was modified. Possible values are
         // 'TYPE', 'DATE', and 'AMOUNT'. If no inconsistency is found, return an empty string
+      String typeNode = this.key.substring(0,2);
+      String dateNode = this.key.substring(2,21);
+      String amountNode = this.key.substring(21);
+
+      String typeEncode = encodeString(this.getType(),chainString);
+      String dateEncode = encodeString(this.getDate(),chainString);
+      String amountEncode = encodeDouble(this.getAmount(),chainString);
+
+      if(!typeNode.equals(typeEncode)){
+        return "TYPE";
+      } else if(!dateNode.equals(dateEncode)){
+        return "DATE";
+      } else if(!amountNode.equals(amountEncode)){
+        return "AMOUNT"
+      } else {
         return "";
+      }
     }
 
 
@@ -126,12 +143,19 @@ public class Node {
     }
 
     String generateNewKey(String oldKey){
-        // TODO: Implement this function. To implement just follow these instructions:
-        // 1. Encode the type using the old key
-        // 2. Encode the date using the old key
-        // 3. Encode the amount using the oldKey
-        // The new key to be returned is the concatenation of the encoded type, date and amount 
-        return "";
+      // TODO: Implement this function. To implement just follow these instructions:
+      // 1. Encode the type using the old key
+      String typeEncode = encodeString(this.getType(),oldKey);
+      // 2. Encode the date using the old key
+      String dateEncode = encodeString(this.getDate(),oldKey);
+      // 3. Encode the amount using the oldKey
+      String amountEncode = encodeDouble(this.getAmount(),oldKey);
+      
+      String concatEncodeKey = typeEncode + dateEncode + amountEncode;
+      this.key = concatEncodeKey;
+      
+      return concatEncodekey;
+      // The new key to be returned is the concatenation of the encoded type, date and amount 
     }
 
     private String encodeDouble(double number, String key){
