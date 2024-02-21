@@ -22,8 +22,8 @@ public class testnode{
     System.out.print("\n Ingrese tipo de transacción: ");
     String amountS = tec.readLine();
     this.amount = Double.parseDouble(amountS);
-    System.out.print("\n String inicial (PRUEBA) : DE2023-08-12 21:44:041000.00");
-    this.key = "DE2023-08-12 21:44:041000.00";
+    System.out.print("\n String inicial (PRUEBA) : asdiuashdi38337asckn");
+    this.key = "asdiuashdi38337asckn";
 
     Node test = new Node(this.type, this.date, this.amount, this.key);
 

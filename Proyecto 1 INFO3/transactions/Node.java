@@ -95,11 +95,23 @@ public class Node {
     public boolean isValid(String chainKey){
         // TODO: Implement this function. Return true if this and all previous nodes are valid.
         // Otherwise, return false. HINT: Try regenerating the node key with the current values.
+      String encodeKey = generateNewKey(this.previousNode.getKey());
+
+      if(this.previousNode == null ){
+        if(this.key.equals(chainKey)){
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        if(!encodeKey.equals(chainKey)){
+          return false;
+        }
         return true;
+      }
     }
 
     public String findInconsistency(String chainString){
-      
         // TODO: Implement this function. Navigate trhough the chain and look for a
         // Node that is inconsistent. Then return which field was modified. Possible values are
         // 'TYPE', 'DATE', and 'AMOUNT'. If no inconsistency is found, return an empty string
@@ -116,16 +128,14 @@ public class Node {
       } else if(!dateNode.equals(dateEncode)){
         return "DATE";
       } else if(!amountNode.equals(amountEncode)){
-        return "AMOUNT"
+        return "AMOUNT";
       } else {
         return "";
       }
     }
 
 
-    private
-
-    void validateFields() throws Exception {
+    private void validateFields() throws Exception {
         if(! this.type.equals("DE") && ! this.type.equals("WH")){
             throw new NodeInvalidException("Invalid Transaction Type: " + this.type);
         }
@@ -152,9 +162,9 @@ public class Node {
       String amountEncode = encodeDouble(this.getAmount(),oldKey);
       
       String concatEncodeKey = typeEncode + dateEncode + amountEncode;
-      this.key = concatEncodeKey;
+      //this.key = concatEncodeKey;
       
-      return concatEncodekey;
+      return concatEncodeKey;
       // The new key to be returned is the concatenation of the encoded type, date and amount 
     }
 
