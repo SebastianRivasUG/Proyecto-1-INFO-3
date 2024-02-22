@@ -94,25 +94,27 @@ public class Node {
 
     public boolean isValid(String chainKey){
         // TODO: Implement this function. Return true if this and all previous nodes are valid.
-        // Otherwise, return false. HINT: Try regenerating the node key with the current values.
-      
-      //Generamos la "clave actual" del nodo con el metodo que ya completamos de generateNewKey
-      //Luego validamos primero si el nodo no es nulo, pq si fuera nulo no tendriamos una oldKey para generar la nueva.
-      //luego ya comparamos la Key actual del nodo con la que debería ser su Key actual y return lo que amerite.
-      String encodeKey = generateNewKey(this.previousNode.getKey());
+        // Otherwise, return false. HINT: Try regenerating the node key with the current values.     
+        //Generamos la "clave actual" del nodo con el metodo que ya completamos de generateNewKey
+        //Luego validamos primero si el nodo no es nulo, pq si fuera nulo no tendriamos una oldKey para generar la nueva.
+        //luego ya comparamos la Key actual del nodo con la que debería ser su Key actual y return lo que amerite.
 
-      if(this.previousNode == null ){
-        if(this.key.equals(chainKey)){
-          return true;
+        // Verificar si el nodo actual es nulo
+        if (this.previousNode == null) {
+            // Validar la clave del nodo actual con la clave de la cadena
+            return this.key.equals(chainKey);
         } else {
-          return false;
+            // Generar la clave actual del nodo con el método generateNewKey
+            String encodeKey = generateNewKey(this.previousNode.getKey());
+
+            // Verificar si la clave actual coincide con la "clave de cadena"
+            if (!encodeKey.equals(chainKey)) {
+                return false;
+            }
+
+            // Validar el nodo anterior recursivamente
+            return this.previousNode.isValid(chainKey);
         }
-      } else {
-        if(!encodeKey.equals(chainKey)){
-          return false;
-        }
-        return true;
-      }
     }
 
     public String findInconsistency(String chainString){
@@ -162,20 +164,19 @@ public class Node {
     }
 
     String generateNewKey(String oldKey){
-      // TODO: Implement this function. To implement just follow these instructions:
-      //Solo se siguen las instrucciones
-      
-      // 1. Encode the type using the old key
-      String typeEncode = encodeString(this.getType(),oldKey);
-      // 2. Encode the date using the old key
-      String dateEncode = encodeString(this.getDate(),oldKey);
-      // 3. Encode the amount using the oldKey
-      String amountEncode = encodeDouble(this.getAmount(),oldKey);
-      
-      String concatEncodeKey = typeEncode + dateEncode + amountEncode;
-      
-      return concatEncodeKey;
-      // The new key to be returned is the concatenation of the encoded type, date and amount 
+        // TODO: Implement this function. To implement just follow these instructions:
+        //Solo se siguen las instrucciones
+        // 1. Encode the type using the old key
+        String typeEncode = encodeString(this.getType(),oldKey);
+        // 2. Encode the date using the old key
+        String dateEncode = encodeString(this.getDate(),oldKey);
+        // 3. Encode the amount using the oldKey
+        String amountEncode = encodeDouble(this.getAmount(),oldKey);
+        
+        String concatEncodeKey = typeEncode + dateEncode + amountEncode;
+        
+        return concatEncodeKey;
+        // The new key to be returned is the concatenation of the encoded type, date and amount 
     }
 
     private String encodeDouble(double number, String key){
