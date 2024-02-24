@@ -2,6 +2,8 @@ package transactions;
 
 import java.util.LinkedList;
 
+import javax.swing.text.DefaultStyledDocument.ElementSpec;
+
 /* This class represents a chain of transactions. Each transaction will be 
 * linked to the previous one in order to maintain consistency. Please modify
 * only the specified methods
@@ -42,12 +44,38 @@ public class Chain {
     public double getBalance(){
         // TODO: Implement this function. Return the balance
         // of the chain only if it is valid. If it is invalid, return 0.0
+        if (this.isValid()) {
+            // Inicializamos el balance en 0.0
+            double balance = 0.0;
+            // Iteramos sobre la lista de transacciones para calcular el balance
+            for (Node node : this.transactions) {
+                if(node.getType().toUpperCase().equals("DE")){
+                    balance += node.getAmount();
+                }
+                else if(node.getType().toUpperCase().equals("WH")){
+                    balance -= node.getAmount();
+                }
+            }
+            return balance;
+        }
         return 0.0;
     }
 
     public boolean isValid(){
         // TODO: Implement this function. Return true or false depending on
         // whether all nodes in the chain are valid or not. 
+        
+        if (this.transactions.size() == 0) {
+            return false;
+        } else {
+            // Obtenemos el último nodo de la lista de transacciones porque isValid() en Node.java es recursivo
+            Node lastNode = this.transactions.getLast();
+            // Validamos que las key sean válidas  y que la cadena de transacciones sea coherente 
+            // por medio del método isValid de Node.java
+            if (!lastNode.isValid(this.chainKey)) {
+                return false;
+            }
+        }
         return true;
     }
 
@@ -55,7 +83,12 @@ public class Chain {
         // TODO: Imeplement this function. Navigate through all nodes in the
         // chain, finding the first one that has an inconsistency, and return it.
         // If no node is found, return null
-        return null;
+
+        // Obtenemos el último nodo de la lista de transacciones porque isValid() en Node.java es recursivo
+        Node lastNode = this.transactions.getLast();
+        // Nos movemos de nodo en nodo hasta encontrar alguno cuya key sea inconsistente.
+        // Usando un método recursivo parecido al de isValid() en Node.java
+        return lastNode.findInconsistentNode(this.chainKey);
     }
 
     public String findInconsistentField(Node node){
