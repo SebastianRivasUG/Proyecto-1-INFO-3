@@ -96,7 +96,7 @@ public class Node {
         // TODO: Implement this function. Return true if this and all previous nodes are valid.
         // Otherwise, return false. HINT: Try regenerating the node key with the current values.     
         //Generamos la "clave actual" del nodo con el metodo que ya completamos de generateNewKey
-        //Luego validamos primero si el nodo no es nulo, pq si fuera nulo no tendriamos una oldKey para generar la nueva.
+        //Luego validamos primero si el nodo no es nulo, porque si fuera nulo no tendriamos una oldKey para generar la nueva.
         //luego ya comparamos la Key actual del nodo con la que debería ser su Key actual y return lo que amerite.
 
         // Verificar si el nodo actual es nulo
@@ -107,7 +107,7 @@ public class Node {
             // Generar la clave actual del nodo con el método generateNewKey
             String encodeKey = generateNewKey(this.previousNode.getKey());
 
-            // Verificar si la clave actual coincide con la "clave de cadena"
+            // Verificar si la clave actual no coincide con la chainKey
             if (!encodeKey.equals(chainKey)) {
                 return false;
             }
@@ -143,6 +143,24 @@ public class Node {
       } else {
         return "";
       }
+    }
+
+    // Mismo método que isValid pero devuelve el nodo en el que se encontró la inconsistencia
+    public Node findInconsistentNode(String chainKey){
+        if (this.previousNode == null) {
+            if (this.key.equals(chainKey)) {
+                return null; // No se encontró inconsistencia
+            } else {
+                return this; // Inconsistencia en el primer nodo
+            }
+        } else {
+            String encodeKey = generateNewKey(this.previousNode.getKey());
+            if (!encodeKey.equals(chainKey)) {
+                return this; // Nodo con inconsistencia
+            }
+            // Validar el nodo anterior recursivamente
+            return this.previousNode.findInconsistentNode(chainKey);
+        }
     }
 
 
