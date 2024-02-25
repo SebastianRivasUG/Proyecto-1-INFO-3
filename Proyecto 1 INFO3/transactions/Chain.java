@@ -57,38 +57,51 @@ public class Chain {
                 }
             }
             return balance;
-        }
+        } 
         return 0.0;
     }
 
     public boolean isValid(){
-        // TODO: Implement this function. Return true or false depending on
-        // whether all nodes in the chain are valid or not. 
-        
-        if (this.transactions.size() == 0) {
-            return false;
-        } else {
-            // Obtenemos el último nodo de la lista de transacciones porque isValid() en Node.java es recursivo
-            Node lastNode = this.transactions.getLast();
-            // Validamos que las key sean válidas  y que la cadena de transacciones sea coherente 
-            // por medio del método isValid de Node.java
-            if (!lastNode.isValid(this.chainKey)) {
-                return false;
-            }
-        }
-        return true;
+      // Verificar si la cadena está vacía
+      if (transactions.isEmpty()) {
+          return false;
+      }
+
+      // Obtener la cadena de clave del primer nodo
+      String chainKey = transactions.getFirst().generateNewKey(this.chainKey);
+
+      // Validar cada nodo en la cadena
+      for (Node node : transactions) {
+          if (!node.isValid(chainKey)) {
+              return false;
+          }
+      }
+
+      // Todos los nodos son válidos
+      return true;
     }
 
     public Node firstInconsistency() {
-        // TODO: Imeplement this function. Navigate through all nodes in the
-        // chain, finding the first one that has an inconsistency, and return it.
-        // If no node is found, return null
+      if(transactions.isEmpty()){
+        return null;
+      }
 
-        // Obtenemos el último nodo de la lista de transacciones porque isValid() en Node.java es recursivo
-        Node lastNode = this.transactions.getLast();
-        // Nos movemos de nodo en nodo hasta encontrar alguno cuya key sea inconsistente.
-        // Usando un método recursivo parecido al de isValid() en Node.java
-        return lastNode.findInconsistentNode(this.chainKey);
+      String firstKey = this.transactions.getFirst().generateNewKey(this.chainKey);
+      
+      for(Node nodo : transactions){
+        if(!nodo.isValid(firstKey)){
+          return nodo;
+        }
+      }
+      return null;
+      // TODO: Imeplement this function. Navigate through all nodes in the
+      // chain, finding the first one that has an inconsistency, and return it.
+      // If no node is found, return null
+
+      // Obtenemos el último nodo de la lista de transacciones porque isValid() en Node.java es recursivo
+      // Nos movemos de nodo en nodo hasta encontrar alguno cuya key sea inconsistente.
+      // Usando un método recursivo parecido al de isValid() en Node.java
+      //return lastNode.findInconsistentNode(this.chainKey);
     }
 
     public String findInconsistentField(Node node){

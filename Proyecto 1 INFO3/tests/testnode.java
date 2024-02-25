@@ -14,7 +14,7 @@ public class testnode{
 
   BufferedReader tec = new BufferedReader(new InputStreamReader(System.in));
 
-  public void pedirDatos() throws IOException {
+  public void pedirDatos() throws Exception {
     System.out.print("Ingrese tipo de transacción: ");
     this.type = tec.readLine();
     System.out.print("\n Ingrese tipo de transacción: ");
