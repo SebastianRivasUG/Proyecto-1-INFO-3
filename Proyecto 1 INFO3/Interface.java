@@ -1,12 +1,15 @@
 import java.util.Scanner;
 import java.util.LinkedList;
 import transactions.*;
+import exceptions.*;
+import java.io.*;
 
 public class Interface {
     private static LinkedList<Chain> chains = new LinkedList<>();
     private static Scanner scanner = new Scanner(System.in);
+    private static BufferedReader tec = new BufferedReader(new InputStreamReader(System.in));
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws NodeInvalidException{
         while (true) {
             printMenu();
             int choice = getUserChoice();
@@ -56,8 +59,17 @@ public class Interface {
     }
 
     private static int getUserChoice() {
-        System.out.print("Ingrese el número de la opción deseada: ");
-        return scanner.nextInt();
+      while(true){
+          try {
+              System.out.print("Ingrese el número de la opción deseada: ");
+              return scanner.nextInt();
+          } catch (Exception e){
+              System.out.println("\nError, Ingrese únicamente un número");
+              System.out.println("Números válidos: 1, 2, 3, 4, 5, 6, 0\n");
+              scanner.nextLine();
+          }
+      }
+        
     }
 
     private static void createNewChain() {
@@ -71,25 +83,57 @@ public class Interface {
     private static void viewAllChains() {
         System.out.println("\n------------------- Todas las Cadenas --------------------");
         for (int i = 1; i <= chains.size(); i++) {
-            System.out.println("Cadena " + (i) + ": " + chains.get(i-1));
+            System.out.println("Cadena " + (i) + ": ");
+            System.out.print(chains.get(i-1).toString());
+            System.out.print("\n");
         }
-        System.out.println("----------------------------------------------------------\n\n");
+        System.out.println("\n----------------------------------------------------------\n\n");
     }
 
     private static void addTransactionToChain() {
-        viewAllChains();
-        System.out.print("Seleccione el número de la cadena a la que desea agregar la transacción: ");
-        int chainIndex = scanner.nextInt() - 1;
-        if (chainIndex < 0 || chainIndex >= chains.size()) {
-            System.out.println("Cadena no válida.");
-            return;
+        try {
+            viewAllChains();
+
+            System.out.print("Seleccione el número de la cadena a la que desea agregar la transacción: ");
+            int chainIndex = scanner.nextInt() - 1;
+
+            if (chainIndex < 0 || chainIndex >= chains.size()) {
+                System.out.println("Cadena no válida.");
+                return;
+            }
+
+            Chain selectedChain = chains.get(chainIndex);
+            String typeNode = getUserInput("Indique el tipo de transacción (DE/WH): ");
+            String dateNode = getUserInput("\n Indique la fecha de la transacción (AAAA-MM-DD HH:mm:ss): ");
+            
+            Double amount = getDoubleInput("Indique el monto de la transacción (#.##): ");
+
+            selectedChain.addTransaction(typeNode, dateNode, amount);
+            if(selectedChain.isValid()){
+              System.out.println("Transacción agregada exitosamente a la cadena seleccionada.\n");
+            } 
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
         }
-
-        Chain selectedChain = chains.get(chainIndex);
-        // Agregar la parte de la transacción
-
-        System.out.println("Transacción agregada exitosamente a la cadena seleccionada.\n");
     }
+
+    private static String getUserInput(String prompt) throws Exception{
+        System.out.print(prompt);
+        return tec.readLine().trim();
+    }
+
+    private static Double getDoubleInput(String prompt) {
+        while (true) {
+            try {
+                System.out.print(prompt);
+                return Double.parseDouble(scanner.next());
+            } catch (NumberFormatException e) {
+                System.out.println("Error: Ingrese un número válido.");
+            }
+        }
+    }
+
 
     private static void getBalanceOfChain() {
         viewAllChains();

@@ -235,4 +235,8 @@ public class Node {
 
         return currentKeyIndex + 1;
     }
+
+  public String toString(){
+    return "[ " + getType() + ", " + getDate() + ", Q" + getAmount() + " ]";
+  }
 }

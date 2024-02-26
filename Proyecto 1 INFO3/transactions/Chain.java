@@ -80,7 +80,6 @@ public class Chain {
               return false;
           }
       }
-
       // Todos los nodos son válidos
       return true;
     }
@@ -98,14 +97,6 @@ public class Chain {
         }
       }
       return null;
-      // TODO: Imeplement this function. Navigate through all nodes in the
-      // chain, finding the first one that has an inconsistency, and return it.
-      // If no node is found, return null
-
-      // Obtenemos el último nodo de la lista de transacciones porque isValid() en Node.java es recursivo
-      // Nos movemos de nodo en nodo hasta encontrar alguno cuya key sea inconsistente.
-      // Usando un método recursivo parecido al de isValid() en Node.java
-      //return lastNode.findInconsistentNode(this.chainKey);
     }
 
     public String findInconsistentField(Node node){
@@ -120,4 +111,14 @@ public class Chain {
             this.transactions.add(new Node(type, date, amount, previousNode));
         }
     }
+
+  public String toString(){
+    System.out.print("| ");
+    for(Node node : transactions){
+      System.out.print(node.toString() + " + ");
+    }
+    System.out.print(" |");
+    return "";
+  }
+  
 }
