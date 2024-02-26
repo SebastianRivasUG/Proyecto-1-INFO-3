@@ -163,24 +163,6 @@ public class Node {
       }
     }
 
-    // Mismo método que isValid pero devuelve el nodo en el que se encontró la inconsistencia
-    public Node findInconsistentNode(String chainKey){
-        if (this.previousNode == null) {
-            if (this.key.equals(chainKey)) {
-                return null; // No se encontró inconsistencia
-            } else {
-                return this; // Inconsistencia en el primer nodo
-            }
-        } else {
-            String encodeKey = generateNewKey(this.previousNode.getKey());
-            if (!encodeKey.equals(chainKey)) {
-                return this; // Nodo con inconsistencia
-            }
-            // Validar el nodo anterior recursivamente
-            return this.previousNode.findInconsistentNode(chainKey);
-        }
-    }
-
 
     private void validateFields() throws Exception {
         if(! this.type.equals("DE") && ! this.type.equals("WH")){

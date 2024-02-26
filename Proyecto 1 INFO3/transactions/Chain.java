@@ -28,6 +28,10 @@ public class Chain {
     public Node transactionAt(int index){
         return this.transactions.get(index);
     }
+
+  public int getSize(){
+    return this.transactions.size();
+  }
     
     public Node findByKey(String key){
         for(int i = 0; i < this.transactions.size(); i++){
